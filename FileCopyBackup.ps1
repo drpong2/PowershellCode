@@ -1,12 +1,26 @@
-<# Data relocation for ISIR import run daily. File lives on ob-dfs1#>
+<# Data relocation for data import run daily. File lives on Server1#>
+$jobtime = Get-Date
 
+Switch( $jobtime.Month )
+ {
+     1 { $month = 'Jan'}
+     2 { $month = 'Feb'}
+     3 { $month = 'Mar'}
+     4 { $month = 'Apr'}
+     5 { $month = 'May'}
+     6 { $month = 'Jun'}
+     7 { $month = 'Jul'}
+     8 { $month = 'Aug'}
+     9 { $month = 'Sep'}
+     10 { $month = 'Oct'}
+     11 { $month = 'Nov'}
+     12 { $month = 'Dec'}
+ }
 # this is a good path and we should keep it (for now)
-$path1 = '\\Path\1\directory'
-$path2 = '\\Path\2\Directory'
+$path1 = '\\Path\1\directory' + $jobtime.year + '\' + $month
+$path2 = '\\Path\2\Directory' + $jobtime.year + '\' + $month
 $pathtarget = '\\Path\to\move\files\to'
 
-
-$jobtime = Get-Date
 $datestamp = $jobtime.Addhours(-8)
 
 $obj1 = Get-ChildItem $path1 -filter "datafile_*" -file | Where-Object {$_.creationtime -gt $datestamp}

@@ -107,14 +107,13 @@ For ($j = 1; $j -le $rowscount; $j++){
     }
 }
 
-write-host "color coding finished or skipped"
-
 $rowscount = ($thiswb.usedrange.rows).count
 #endregion
-
+$date = (get-date).ToShortDateString()
+$fsdate = $date.Replace('/','-')
 $xlsxPath = 'C:\scripts\'
-join-path 
-$workbook.SaveAs(
+$saveloc = $xlsxPath + 'abandonedCalls.' + $fsdate + '.xlsx'
+$workbook.SaveAs($saveloc)
 
 
 

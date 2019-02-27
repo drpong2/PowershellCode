@@ -1,38 +1,39 @@
-$vms = @()
+$VirtualMachines = @()
 
-$vms = get-vm | select-object Name
+$VirtualMachines = Get-VM | Select-Object Name
 
-Write-host "Select from the VMs below"
-write-host "==========="
+Write-host "Select from the virtual machines below `n `n"
+
 $i = 1
-foreach ($vm in $vms){
-    write-host "$($i): $($vm.name)"
+ForEach ($vm in $VirtualMachines)
+{
+    Write-Host "$($i): $($vm.name)"
     $i++
 }
 
 
-$vmarrayindex = read-host ("Enter a number from 1 to {0} to select a VM" -f $vms.count)
+$vmarrayindex = read-host ("Enter a number from 1 to {0} to select a virtual machine" -f $VirtualMachines.count)
 
 $vmselect = $vmarrayindex - 1
 
+$workingvm = Get-VM ($VirtualMachines[$vmselect].Name)
 
-$workingvm = get-vm ($vms[$vmselect].Name)
+$VHDlocation = $workingvm.HardDrives.Path
 
-$vhdloc = $workingvm.HardDrives.Path
+$VHDLocation
 
-$vhdloc
+$VHDDelAction = Read-Host ("Unmount and delete? y/n (n)")
 
-$vhdel = read-host ("Unmount and delete? y/n (y)")
+switch ($VHDDelAction)
+{
+    "Y" {Remove-Item $VHDLocation}
+    default { exit } 
+}
 
-<#
-$workingvm | get-member
+$VMDelAction = Read-Host "The VHD file located at $VHDLocation has been deleted. `nWould you like to remove the following virtual machine: $workingvm y/n (n)"
 
-write-host "working VM is " $workingvm.name
-$vhdloc = $workingvm.HardDrives.Path
-get-vhd $vhdloc
-
-
-
-#get-vm -name ($vms[$vmselect].name)
-
-#>
+switch ($VMDelAction)
+{
+    "Y" {Remove-VM $workingvm.name}
+    default { exit } 
+}

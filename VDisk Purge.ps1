@@ -17,6 +17,15 @@ $vmselect = $vmarrayindex - 1
 
 
 $workingvm = get-vm ($vms[$vmselect].Name)
+if($workingvm.status -ne "Off"){
+    $StopVM = read-host ("Virtual Machine is not turned off! Turn off now? y/n (n)")
+    switch ($StopVM)
+    {
+        "Y" {stop-vm $workingvm}
+        default { exit } 
+    }
+    start-sleep -seconds 3
+}
 
 $vhdloc = $workingvm.HardDrives.Path
 

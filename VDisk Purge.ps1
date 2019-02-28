@@ -17,6 +17,15 @@ $vmarrayindex = read-host ("Enter a number from 1 to {0} to select a virtual mac
 $vmselect = $vmarrayindex - 1
 
 $workingvm = Get-VM ($VirtualMachines[$vmselect].Name)
+if($workingvm.state -ne "Off"){
+    $StopVM = read-host ("Virtual Machine is not turned off! Turn off now? y/n (n)")
+    switch ($StopVM)
+    {
+        "Y" {stop-vm $workingvm}
+        default { exit } 
+    }
+    start-sleep -seconds 2
+}
 
 $VHDlocation = $workingvm.HardDrives.Path
 

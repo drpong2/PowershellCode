@@ -1,48 +1,60 @@
-$VirtualMachines = @()
+Function Get-VMHDs{
 
-$VirtualMachines = Get-VM | Select-Object Name
+    $VirtualMachines = @()
 
-Write-host "Select from the virtual machines below `n `n"
+    $VirtualMachines = Get-VM | Select-Object Name
 
-$i = 1
-ForEach ($vm in $VirtualMachines)
-{
-    Write-Host "$($i): $($vm.name)"
-    $i++
-}
+    Write-host "Select from the virtual machines below `n `n"
 
-
-$vmarrayindex = read-host ("Enter a number from 1 to {0} to select a virtual machine" -f $VirtualMachines.count)
-
-$vmselect = $vmarrayindex - 1
-
-$workingvm = Get-VM ($VirtualMachines[$vmselect].Name)
-if($workingvm.state -ne "Off"){
-    $StopVM = read-host ("Virtual Machine is not turned off! Turn off now? y/n (n)")
-    switch ($StopVM)
+    $i = 1
+    ForEach ($vm in $VirtualMachines)
     {
-        "Y" {stop-vm $workingvm}
-        default { exit } 
+        Write-Host "$($i): $($vm.name)"
+        $i++
     }
-    start-sleep -seconds 2
+
+
+    $vmarrayindex = read-host ("Enter a number from 1 to {0} to select a virtual machine" -f $VirtualMachines.count)
+
+    $vmselect = $vmarrayindex - 1
+
+    $workingvm = Get-VM ($VirtualMachines[$vmselect].Name)
+    if($workingvm.state -ne "Off"){
+        $StopVM = read-host ("Virtual Machine is not turned off! Turn off now? y/n (n)")
+        switch ($StopVM)
+        {
+            "Y" {stop-vm $workingvm}
+            default { return } 
+        }
+        start-sleep -seconds 2
+    }
+
+    $VHDlocation = $workingvm.HardDrives.Path
+
+    $VHDLocation
+
+    $VHDDelAction = Read-Host ("Unmount and delete? y/n (n)")
+
+    switch ($VHDDelAction)
+    {
+        "Y" {Remove-Item $VHDLocation}
+        default { return } 
+    }
+
+    $VMDelAction = Read-Host "The VHD file located at $VHDLocation has been deleted. `nWould you like to remove the following virtual machine: $workingvm y/n (n)"
+
+    switch ($VMDelAction)
+    {
+        "Y" {Remove-VM $workingvm.name}
+        default { return } 
+    }
+    
+
 }
+Get-VMHDs
 
-$VHDlocation = $workingvm.HardDrives.Path
 
-$VHDLocation
 
-$VHDDelAction = Read-Host ("Unmount and delete? y/n (n)")
-
-switch ($VHDDelAction)
-{
-    "Y" {Remove-Item $VHDLocation}
-    default { exit } 
-}
-
-$VMDelAction = Read-Host "The VHD file located at $VHDLocation has been deleted. `nWould you like to remove the following virtual machine: $workingvm y/n (n)"
-
-switch ($VMDelAction)
-{
-    "Y" {Remove-VM $workingvm.name}
-    default { exit } 
-}
+Do {
+    Get-VMHDs
+} While ((Read-Host "Rerun script? y/n (n)") -eq "Y")

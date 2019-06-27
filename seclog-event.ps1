@@ -13,3 +13,10 @@ for ($i = 0; $i -le $count; $i++){
         out-file -filepath $writepath -inputobject $logins.message[$i] -append
         }
 }
+
+<#
+Coding improvement possibility
+$secpath = "C:\Scripts\SecLogTest.csv"
+Get-EventLog -LogName Security | Select EntryType,InstanceID,TimeGenerated,@{n='message';e={$_.message -replace '\s+'," "}} | export-csv $secpath -notypeinformation
+#>
+

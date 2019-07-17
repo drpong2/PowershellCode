@@ -1,0 +1,104 @@
+Pre-Checks
+	Stop all Services/Websites
+		T-OB-WEB1, T-OB-App1, T-OB-PROC1
+	Remove all active sessions from system
+	
+
+T-OB-WEB1 upgrade
+
+IIS 10
+	appnet
+t-ob-web1.emp.ads.morainevalley.edu
+
+Deployment wizard
+Diagnostics Console
+WAMCON
+	back up web.config
+	C:\inetpub\wwwroot\AppNet\web.config
+OnBase Test ODBC
+	Install the ADO.NET connector
+	Does web.config need to be updated for ADO.NET
+	
+
+Uninstall OnBase
+	Hyland Diagnostics Components
+	Hyland Unity Client Deployment (Deployment Wizard)
+	Hyland Web Server 17
+	
+Install OnBase
+	Hyland Diagnostics Components
+		M:\ServerFiles\onbase\18 upgrade\releaseCoreServerSide.zip\install\Diagnostics Components
+	Hyland Unity Client Deployment
+		M:\ServerFiles\onbase\18 upgrade\releaseUnityClient.zip\install\ClickOnce\Unity Client
+	Hyland Web Server 18
+		M:\ServerFiles\onbase\18 upgrade\releaseCoreServerSide.zip\install\x64\Web Server
+		
+		
+<#region>
+T-OB-APP1 upgrade
+IIS 10
+	appServer
+t-ob-app1.emp.ads.morainevalley.edu
+
+
+Deployment wizard
+Diagnostics Console
+WAMCON
+	back up web.config
+	C:\inetpub\wwwroot\AppServer\web.config
+OnBase Test ODBC
+	Install the ADO.NET connector
+	Does web.config need to be updated for ADO.NET
+	
+Install OnBase
+	Hyland Diagnostics Components
+		M:\ServerFiles\onbase\18 upgrade\releaseCoreServerSide.zip\install\Diagnostics Components
+	Hyland Application Server 18 x86
+		M:\ServerFiles\onbase\18 upgrade\releaseCoreServerSide.zip\install\Application Server
+	Uninstall .net 2017 redist first
+		
+<#region>
+		
+T-OB-PROC1 upgrade
+
+ODBC - Connected to test - 32bit
+
+Services:
+	Hyland Diagnostic Services
+	Hyland Scanning Process
+	Hyland Scheduled Processes
+
+Install OnBase
+	Hyland Application Enabler Configuration
+	Hyland Diagnostics components
+		M:\ServerFiles\onbase\18 upgrade\releaseCoreServerSide.zip\install\Diagnostics Components
+	Hyland OCR Engine 19.20 P08 for Onbase Client
+	Hyland OnBase Client
+		M:\ServerFiles\onbase\18 upgrade\releaseThickInstaller.zip\Thick\install\OnBase Client
+	Hyland Onbase Configuration
+		M:\ServerFiles\onbase\18 upgrade\releaseThickInstaller.zip\Thick\install\OnBase Configuration
+	Hyland OnBase Studio
+		M:\ServerFiles\onbase\18 upgrade\releaseOnBaseStudio.zip\install\OnBase Studio
+	Hyland Unity Client
+		M:\ServerFiles\onbase\18 upgrade\releaseUnityClient.zip\install\Unity Client
+	Hyland unity Client Deployment
+		M:\ServerFiles\onbase\18 upgrade\releaseUnityClient.zip\install\ClickOnce\Unity Client
+	Hyland unity Scheduler x86
+	Hyland Unity Management Console
+
+	
+	t-ob-app1
+	remoteclientrelaymessageaction
+	hyland.diagnostics.ntservice.exe.config
+	
+NO impersonation on the web services
+
+
+Backup web.config
+	Copy values into WAMCON manually
+	
+Set ADO.net connection string on AppServer (in WAMCON)
+
+For OBStudio
+	Install WAMCon on Proc1 - Make Target (shortcut) obstudio.exe.config
+		Configure connection string

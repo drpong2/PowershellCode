@@ -49,6 +49,7 @@ $assetarray = $assets2.assets.attributes | where {$null -ne $_.username} | selec
 
 
 $downloadbody = @{
+
     "assetQuery" = @{
         "galleryId" = "10"
         "pagesize" = "$assetsnum"
@@ -57,6 +58,7 @@ $downloadbody = @{
         "description" = "JOB_TYPE_EDIT_ON_DISK"
         "sourceImage" = "original"
         tasks = @(@{
+                "destination" = "C:\workspace\assets.zip"
                 type = "download"
             },
             @{
@@ -106,7 +108,7 @@ $downloadbody = @{
 
 $jsondownload = $downloadbody | ConvertTo-Json -Depth 6
 
-irm -uri "$urlbase/job/run/$auth&$catid" -method post -outfile 'C:\workspace\assets.zip' -ContentType $contentType -body $jsondownload
+irm -uri "$urlbase/job/run/$auth&$catid" -method post -ContentType $contentType -body $jsondownload
 
 <#
 foreach($asset in $assetarray){

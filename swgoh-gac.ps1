@@ -19,12 +19,14 @@ function show-subpar($toons){
 }
 
 function compare-median($toons){
-    $toons = $topavg
+    [int]$topavg = 0
     $topvalues = $playerdata.units.data | where {$_.combat_type -ne "2"} | select power | sort power -desc | select -first $toptoons
+    foreach ($toon in $topvalues){$topavg = $topavg + $toon.power -as [int]}
+    $topmedian = $topavg / $topvalues.Count
     $midtoon = $toptoons/2
     $midval = $topvalues.power[$midtoon]
-    $returnarray = @("$topavg", "$midval")
-    return $midtoon
+    $returnarray = @("$topmedian", "$midval")
+    return $returnarray
 }
 
 

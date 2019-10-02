@@ -10,9 +10,9 @@ foreach ($player in $playerlist){
     $playercode = $player.ally_code
     $uri = "https://swgoh.gg/api/player/$playercode"
     $apiget = irm -uri $uri -method get
-    $apiget.units.data | where {$_.name -in $grjedi}
-    $playertoon = $apiget.units.data
-    $playergrjedi = $playertoon | where {$_.name -in $grjedi.name} | select name, rarity, gear_level
-    write-host $player.name, $playergrjedi
+    $playertoon = $apiget.units.data | where {$_.name <#-in $grjedi#> -eq "Kit Fisto"}
+    <#$playertoon = $apiget.units.data#>
+    $playergrjedi = $playertoon <#| where {$_.name -in $grjedi.name -eq "Kit Fisto"} #>| select <#name, #>rarity, gear_level
+    $player.name >> C:\scripts\kitfisto.txt; $playergrjedi >> C:\scripts\kitfisto.txt
 }
 

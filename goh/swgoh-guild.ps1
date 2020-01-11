@@ -40,9 +40,10 @@ function compare-median($toons){
     return $returnarray
 }
 #>
-$keytoonstally = [pscustomobject] @(
-)
 
+<#$keytoonstally = [pscustomobject] @(
+)
+#>
 
 $members = [pscustomobject] @(
         )
@@ -54,10 +55,10 @@ $playercode = import-csv C:\github\goh\members.csv
         $playercode = 849568558
     }
     #>
-    $i = 1
+    #$i = 1
 foreach($player in $playercode){
     $allycode = $player.code
-    $name = $player.name
+    $name = $player.username
     $uri = "https://swgoh.gg/api/player/$allycode/"
 
     $playerdata = irm -uri $uri -method get
@@ -81,7 +82,7 @@ foreach($player in $playercode){
             totalGP = $totalGP
     }
     $keytoons = [pscustomobject] @{
-        
+
     }
 
     <#

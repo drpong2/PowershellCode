@@ -78,7 +78,7 @@ foreach($player in $playercode){
     <#use arraylists instead ~ LightofSeven#8184
     $sgp = [System.Collections.ArrayList]@() - $sgp defined on line 65, also fix $gp on line 72 (defined on line 64)
     $sgp.add($ship.power)
-    foreach($ship in $sgp) $tsgp += $sgp
+    $sgp | measure-object -sum
 
     #>
     foreach($ship in $ships){

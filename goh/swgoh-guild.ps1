@@ -61,6 +61,10 @@ foreach($player in $playercode){
     $name = $player.username
     $uri = "https://swgoh.gg/api/player/$allycode/"
 
+    $tgp = 0
+    $sgp = 0
+    $totalgp = 0
+
     $playerdata = irm -uri $uri -method get
 
     $toons = $playerdata.units.data | where {$_.combat_type -ne "2"} | select name, power | sort power -desc
@@ -71,6 +75,12 @@ foreach($player in $playercode){
     $ships = $playerdata.units.data | where {$_.combat_type -eq "2"} | select name, power, rarity | sort power -desc # | select -first $toptoons
     #combat type 2 is ships
 
+    <#use arraylists instead ~ LightofSeven#8184
+    $sgp = [System.Collections.ArrayList]@() - $sgp defined on line 65, also fix $gp on line 72 (defined on line 64)
+    $sgp.add($ship.power)
+    foreach($ship in $sgp) $tsgp += $sgp
+
+    #>
     foreach($ship in $ships){
         $sgp += $ship.power
     }
@@ -81,10 +91,11 @@ foreach($player in $playercode){
             shipGP = $sgp
             totalGP = $totalGP
     }
+    <#
     $keytoons = [pscustomobject] @{
 
     }
-
+    #>
     <#
 GAS
 Malak

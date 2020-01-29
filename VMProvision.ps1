@@ -1,6 +1,6 @@
 <# VM provisioning script #>
 
-$verprompt = @("Enter the OS you would like to install: 1 for 2016, 2 for 2012, 3 for other: ")
+$verprompt = @("Enter the OS you would like to install: 1 for 2016, 2 for 2012, 3 for other")
 $vmver = Read-host($verprompt)
 
 switch ( $vmver ){

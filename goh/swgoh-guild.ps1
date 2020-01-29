@@ -61,17 +61,17 @@ foreach($player in $playercode){
     $name = $player.username
     $uri = "https://swgoh.gg/api/player/$allycode/"
 
-    $tgp = 0
-    $sgp = 0
-    $totalgp = 0
+    $tgp = [System.Collections.ArrayList]@()
+    $sgp = [System.Collections.ArrayList]@()
+    $totalgp = [System.Collections.ArrayList]@()
 
     $playerdata = irm -uri $uri -method get
 
     $toons = $playerdata.units.data | where {$_.combat_type -ne "2"} | select name, power | sort power -desc
     foreach($toon in $toons){
-        $tgp += $toon.power
+        $tgp.add($toon.power)
     }
-
+    $tgpsum = $tgp | Measure-Object -Sum
     $ships = $playerdata.units.data | where {$_.combat_type -eq "2"} | select name, power, rarity | sort power -desc # | select -first $toptoons
     #combat type 2 is ships
 
@@ -82,13 +82,15 @@ foreach($player in $playercode){
 
     #>
     foreach($ship in $ships){
-        $sgp += $ship.power
+        $sgp.add($ship.power)
     }
-    $totalgp = $tgp + $sgp
+    $sgpsum = $sgp | Measure-Object -Sum
+    $totalgp.add($tgpsum)
+    $totalgp.add($sgpsum)
     $playerstats = [pscustomobject] @{
             name = $name
-            toonGP = $tgp
-            shipGP = $sgp
+            toonGP = $tgpsum
+            shipGP = $sgpsum
             totalGP = $totalGP
     }
     <#
@@ -111,6 +113,7 @@ S(Y-wing)
 
     $members += $playerstats
 }
+$members | select name, @{n='Toon/Ship GP';e={$_.totalGP.sum}}, @{n='total GP';e={$_.toongp.sum + $_.shipgp.sum}}
 
 
 <#
